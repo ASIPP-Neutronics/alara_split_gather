@@ -27,6 +27,9 @@ def assign_subtasks(total_num, num_tasks=2):
         subtasks.append(ids)
     return subtasks
         
-        
+def diff_check_file(f1, f2):
+    command = ''.join(["diff ", "--strip-trailing-cr ", f1, " ", f2])
+    flag = os.system(command)
+    return flag
 
 

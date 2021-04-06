@@ -2,6 +2,7 @@
 import re
 import os
 import argparse
+from alara_split_gather.utils import assign_subtasks
 
 def is_volume_start(line):
     volume_start_pattern = re.compile("^volume", re.IGNORECASE) 
@@ -83,8 +84,8 @@ def split_alara_inp(inp="alara_inp", num_tasks=10, sep='_', truncation=None):
     mats = get_mats(inp)
     #print(zones, vols, mats)
     vol_per_task = num_vols // num_tasks
-    subtask_ids = calc_subtask_ids(num_vols, num_tasks)
-    for tid in range(num_tasks):
+    subtasks = assign_subtasks(num_vols, num_tasks)
+    for tid in range(len(subtasks)):
         print(f"write files for task {tid}")
         inp_name = f"{inp}{sep}{tid}"
         fin = open(inp, 'r')
@@ -105,7 +106,8 @@ def split_alara_inp(inp="alara_inp", num_tasks=10, sep='_', truncation=None):
                 fo.write(line)
             if vol_start and (not vol_end) and (not vol_write):
                 # write specific vols
-                for i in range(vol_per_task):
+                #for i in range(vol_per_task):
+                for i, item in enumerate(subtasks[tid]):
                     vid = tid*vol_per_task + i
                     cnt = f"\t {vols[vid]} {zones[vid]}\n"
                     fo.write(cnt)
@@ -121,7 +123,8 @@ def split_alara_inp(inp="alara_inp", num_tasks=10, sep='_', truncation=None):
                 fo.write(line)
             if mat_start and (not mat_end) and (not mat_write):
                 # write specific mats
-                for i in range(vol_per_task):
+                #for i in range(vol_per_task):
+                for i, item in enumerate(subtasks[tid]):
                     vid = tid*vol_per_task + i
                     cnt = f"\t {zones[vid]} {mats[vid]}\n"
                     fo.write(cnt)
@@ -189,7 +192,7 @@ def pbs_generation(tid, inp="alara_inp", sep='_'):
     fo.write(f"$HOME/opt/ALARA/bin/alara {inp}{sep}{tid} > output{sep}{tid}.txt\n")
     fo.close()
 
-def split_task():
+def alara_split_task():
     """
     Split the alara task
     """
