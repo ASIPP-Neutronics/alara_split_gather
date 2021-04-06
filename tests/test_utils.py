@@ -9,8 +9,7 @@ from numpy.testing import assert_array_equal, assert_array_almost_equal
 
 import numpy as np
 import filecmp
-from utils import *
-
+from alara_split_gather.utils import calc_subtask_ids
 
 cwd = os.getcwd()
 
