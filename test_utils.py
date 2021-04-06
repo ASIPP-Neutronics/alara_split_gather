@@ -15,6 +15,13 @@ from utils import *
 cwd = os.getcwd()
 
 def test_calc_subtask_ids():
+    # 
+    total_num = 4
+    num_tasks = 2
+    exp_subtask_ids = [[0, 1], [2, 3]]
+    subtask_ids = calc_subtask_ids(total_num, num_tasks=num_tasks)
+    assert_array_equal(subtask_ids, exp_subtask_ids)
+    #  
     total_num = 5
     num_tasks = 2
     exp_subtask_ids = [[0, 1], [2, 3, 4]]
