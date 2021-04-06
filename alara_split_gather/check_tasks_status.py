@@ -2,7 +2,7 @@
 import os
 import argparse
 
-def check_tasks_status(num_tasks, sep='_', prefix='phtn_src'):
+def check_status(num_tasks, sep='_', prefix='phtn_src'):
     # generate filenams for checking
     files = []
     sizes = []
@@ -40,7 +40,7 @@ def check_tasks_status(num_tasks, sep='_', prefix='phtn_src'):
     print(run_str)
 
    
-if __name__ == '__main__':
+def alara_tasks_status():
     check_tasks_status_help = ('This script check the status of alara tasks\n')
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--num_tasks", required=True, help="number to sub-tasks, default: 2")
@@ -64,4 +64,4 @@ if __name__ == '__main__':
             raise ValueError(f"separator {args['separator']} not supported!")
         sep = args['separator']
 
-    check_tasks_status(num_tasks, sep=sep, prefix=prefix)
+    check_status(num_tasks, sep=sep, prefix=prefix)
