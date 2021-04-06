@@ -189,7 +189,7 @@ def pbs_generation(tid, inp="alara_inp", sep='_'):
     fo.write(f"$HOME/opt/ALARA/bin/alara {inp}{sep}{tid} > output{sep}{tid}.txt\n")
     fo.close()
 
-if __name__ == '__main__':
+def split_task():
     """
     Split the alara task
     """
@@ -226,10 +226,10 @@ if __name__ == '__main__':
         print(f"ALARA data: {data}")
 
     # truncation
-    truncation = None
+    truncation = 1e-12
     if args['truncation'] is not None:
         truncation = float(args['truncation'])
-        print(f"new truncation: {truncation}")
+        print(f"use truncation: {truncation}")
 
     split_alara_inp(inp, num_tasks, sep=sep, truncation=truncation)
     
@@ -247,4 +247,3 @@ if __name__ == '__main__':
         os.chdir("..")
         
 
-  
