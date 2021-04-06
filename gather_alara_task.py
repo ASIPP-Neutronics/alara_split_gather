@@ -5,7 +5,7 @@ import os
 import argparse
 from pyne.alara import _make_response_dtype
 
-def append_photon_source_to_hdf5(num_task=2, nucs='all', chunkshape=(10000,),
+def append_photon_source_to_hdf5(num_tasks=2, nucs='all', chunkshape=(10000,),
         output='phtn_src.h5',sep='_'):
     """Converts a plaintext photon source file to an HDF5 version for
     quick later use.
@@ -30,7 +30,7 @@ def append_photon_source_to_hdf5(num_task=2, nucs='all', chunkshape=(10000,),
         Nuclides need to write into h5 file. For example:
             - 'all': default value. Write the information of all nuclides to h5.
             - 'total': used for r2s. Only write TOTAL value to h5.
-    num_task : int
+    num_tasks : int
         Number of alara tasks.
     chunkshape : tuple of int
         A 1D tuple of the HDF5 chunkshape.
@@ -49,12 +49,12 @@ def append_photon_source_to_hdf5(num_task=2, nucs='all', chunkshape=(10000,),
     row_count = 0
     files = []
     # get phtn_src files
-    print(f"{num_task} files to be write into {output}")
-    for i in range(num_task):
+    print(f"{num_tasks} files to be write into {output}")
+    for i in range(num_tasks):
         filename = os.path.join(".", f"task{i}", f"phtn_src{sep}{i}")
         files.append(filename)
     for filename in files:
-        print(f"    running with file {filename}, [{i}/{num_task}]")
+        print(f"    running with file {filename}, [{i}/{num_tasks}]")
         f = open(filename, 'r')
         for i, line in enumerate(f, 1):
             tokens = line.strip().split('\t')
@@ -91,20 +91,20 @@ def append_photon_source_to_hdf5(num_task=2, nucs='all', chunkshape=(10000,),
     h5f.close()
     print("Done")
 
-def merge_phtn_src(num_task=2, prefix="phtn_src", output="phtn_src", sep='_'):
+def merge_phtn_src(num_tasks=2, prefix="phtn_src", output="phtn_src", sep='_'):
     """
     Merge phtn_src of sub-tasks into a single phtn_src.
     """
-    print(f"{num_task} files to merge.")
+    print(f"{num_tasks} files to merge.")
     # get phtn_src files
     files = []
-    for i in range(num_task):
+    for i in range(num_tasks):
         filename = os.path.join(".", f"task{i}", f"{prefix}{sep}{i}")
         files.append(filename)
     # write content
     fo = open(output, 'w')
     for i, filename in enumerate(files):
-        print(f"    merging {filename}, [{i}/{num_task}]")
+        print(f"    merging {filename}, [{i}/{num_tasks}]")
         with open(filename, 'r') as fin:
             cnt = fin.read()
             fo.write(cnt)
@@ -113,7 +113,7 @@ def merge_phtn_src(num_task=2, prefix="phtn_src", output="phtn_src", sep='_'):
 if __name__ == '__main__':
     gather_alara_task_help = ('This script gather alara output and phtn_src\n')
     parser = argparse.ArgumentParser()
-    parser.add_argument("-n", "--num_task", required=False, help="number to sub-tasks, default: 2")
+    parser.add_argument("-n", "--num_tasks", required=False, help="number to sub-tasks, default: 2")
     parser.add_argument("-m", "--mode",required=False, help="mode of gather, txt or h5")
     parser.add_argument("-o", "--output", required=False, help="output file")
     parser.add_argument("-p", "--prefix", required=False, help="prefix of alara output")
@@ -122,10 +122,10 @@ if __name__ == '__main__':
 
 
     # number of tasks
-    num_task = 2
-    if args['num_task'] is not None:
-        num_task = int(args['num_task'])
-    print(f"num_task: {num_task}")
+    num_tasks = 2
+    if args['num_tasks'] is not None:
+        num_tasks = int(args['num_tasks'])
+    print(f"num_tasks: {num_tasks}")
     
     # mode
     mode = 'h5'
@@ -158,10 +158,10 @@ if __name__ == '__main__':
 
 
     if mode == 'h5':
-        append_photon_source_to_hdf5(num_task=num_task, nucs='TOTAL',
+        append_photon_source_to_hdf5(num_tasks=num_tasks, nucs='TOTAL',
             output=output, sep=sep)
     elif mode == 'txt':
-        merge_phtn_src(num_task=num_task, prefix=prefix, output=output, sep=sep)
+        merge_phtn_src(num_tasks=num_tasks, prefix=prefix, output=output, sep=sep)
     else:
         raise ValueError("Wrong mode")
 

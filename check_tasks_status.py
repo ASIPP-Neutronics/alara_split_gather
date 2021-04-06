@@ -2,13 +2,13 @@
 import os
 import argparse
 
-def check_tasks_status(num_task, sep='_', prefix='phtn_src'):
+def check_tasks_status(num_tasks, sep='_', prefix='phtn_src'):
     # generate filenams for checking
     files = []
     sizes = []
     running = []
     finished = []
-    for i in range(num_task):
+    for i in range(num_tasks):
         filename = os.path.join(".", f"task{i}", f"{prefix}{sep}{i}")
         files.append(filename)
         size = os.path.getsize(filename)
@@ -43,14 +43,14 @@ def check_tasks_status(num_task, sep='_', prefix='phtn_src'):
 if __name__ == '__main__':
     check_tasks_status_help = ('This script check the status of alara tasks\n')
     parser = argparse.ArgumentParser()
-    parser.add_argument("-n", "--num_task", required=True, help="number to sub-tasks, default: 2")
+    parser.add_argument("-n", "--num_tasks", required=True, help="number to sub-tasks, default: 2")
     parser.add_argument("-s", "--separator", required=False, help=" '_' or '-'")
     parser.add_argument("-p", "--prefix", required=False, help="prefix of phtn_src")
     args = vars(parser.parse_args())
 
     # number of tasks
-    if args['num_task'] is not None:
-        num_task = int(args['num_task'])
+    if args['num_tasks'] is not None:
+        num_tasks = int(args['num_tasks'])
 
     # prefix
     prefix = "phtn_src"
@@ -64,4 +64,4 @@ if __name__ == '__main__':
             raise ValueError(f"separator {args['separator']} not supported!")
         sep = args['separator']
 
-    check_tasks_status(num_task, sep=sep, prefix=prefix)
+    check_tasks_status(num_tasks, sep=sep, prefix=prefix)

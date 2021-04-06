@@ -74,16 +74,17 @@ def get_mats(inp="alara_inp"):
                 break
     return mats
 
-def split_alara_inp(inp="alara_inp", num_task=10, sep='_', truncation=None):
-    """Split alara_inp into num_task sub-tasks"""
+def split_alara_inp(inp="alara_inp", num_tasks=10, sep='_', truncation=None):
+    """Split alara_inp into num_tasks sub-tasks"""
     num_vols = count_vols(inp)
-    if (num_vols % num_task) > 0:
-        raise ValueError(f"num_task must be divisable of {num_vols}")
+    if (num_vols % num_tasks) > 0:
+        raise ValueError(f"num_tasks must be divisable of {num_vols}")
     zones, vols = get_zones_vols(inp)
     mats = get_mats(inp)
     #print(zones, vols, mats)
-    vol_per_task = num_vols // num_task
-    for tid in range(num_task):
+    vol_per_task = num_vols // num_tasks
+    subtask_ids = calc_subtask_ids(num_vols, num_tasks)
+    for tid in range(num_tasks):
         print(f"write files for task {tid}")
         inp_name = f"{inp}{sep}{tid}"
         fin = open(inp, 'r')
@@ -194,7 +195,7 @@ if __name__ == '__main__':
     """
     split_alara_task_help = ('This script read an alara_inp and split it into samller task\n')
     parser = argparse.ArgumentParser()
-    parser.add_argument("-n", "--num_task", required=False, help="number to sub-tasks, default: 2")
+    parser.add_argument("-n", "--num_tasks", required=False, help="number to sub-tasks, default: 2")
     parser.add_argument("-i", "--input", required=False, help="ALARA input, default: alara_inp")
     parser.add_argument("-d", "--data", required=False, help="ALARA data file, default: ./data")
     parser.add_argument("-s", "--separator", required=False, help=" '_' or '-'")
@@ -207,9 +208,9 @@ if __name__ == '__main__':
         inp = args['input']
 
     # number of tasks
-    if args['num_task'] is not None:
-        num_task = int(args['num_task'])
-        print(f"{num_task} sub-tasks will be generated")
+    if args['num_tasks'] is not None:
+        num_tasks = int(args['num_tasks'])
+        print(f"{num_tasks} sub-tasks will be generated")
 
     # separator
     sep = '_'
@@ -230,10 +231,10 @@ if __name__ == '__main__':
         truncation = float(args['truncation'])
         print(f"new truncation: {truncation}")
 
-    split_alara_inp(inp, num_task, sep=sep, truncation=truncation)
+    split_alara_inp(inp, num_tasks, sep=sep, truncation=truncation)
     
     # setup sub-task directories
-    for i in range(num_task):
+    for i in range(num_tasks):
         os.system(f"mkdir -p task{i}")
         os.system(f"ln -sf {os.path.abspath(data)} task{i}/data")
         # goes into sub-task dir
