@@ -16,7 +16,7 @@ setup(name='alara_split_gather',
       long_description=open('README.md').read(),
       entry_points={
           "console_scripts":["alara_split_task = alara_split_gather.alara_split_task:alara_split_task",
-                             "alara_tasks_status = alara_split_gather.check_tasks_status:check_tasks_status",
+                             "alara_tasks_status = alara_split_gather.check_tasks_status:alara_tasks_status",
                              "alara_gather_tasks = alara_split_gather.alara_gather_tasks:alara_gather_tasks"
                              ]
           },
