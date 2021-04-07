@@ -78,8 +78,8 @@ def get_mats(inp="alara_inp"):
 def split_alara_inp(inp="alara_inp", num_tasks=10, sep='_', truncation=None):
     """Split alara_inp into num_tasks sub-tasks"""
     num_vols = count_vols(inp)
-    if (num_vols % num_tasks) > 0:
-        raise ValueError(f"num_tasks must be divisable of {num_vols}")
+    if num_vols < num_tasks:
+        raise ValueError(f"num_tasks must be smaller than {num_vols}")
     zones, vols = get_zones_vols(inp)
     mats = get_mats(inp)
     #print(zones, vols, mats)
@@ -136,7 +136,7 @@ def split_alara_inp(inp="alara_inp", num_tasks=10, sep='_', truncation=None):
             if "mixture" in line:
                 #import pdb; pdb.set_trace()
                 line_ele = line.strip().split()
-                if line_ele[1] in mats[tid*vol_per_task:(tid+1)*vol_per_task]:
+                if line_ele[1] in mats[tid*vol_per_task:tid*vol_per_task+len(subtasks[tid])]:
                     fo.write(line)
                     while True:
                         line = fin.readline()

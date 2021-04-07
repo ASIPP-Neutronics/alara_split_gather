@@ -20,7 +20,7 @@ def diff_check_file(f1, f2):
     return flag
 
 
-def test_alara_split_inp():
+def test_alara_split_inp_4_2():
     workdir = os.path.join(cwd, "files_test_split", "split_4_2")
     inp = os.path.join(workdir, "alara_inp")
     exp_sub0 = os.path.join(workdir, "exp_alara_inp_0")
@@ -43,5 +43,35 @@ def test_alara_split_inp():
     # remove A, B, X, Y
     os.system(f"rm -rf {os.path.join(workdir, 'task0')}")
     os.system(f"rm -rf {os.path.join(workdir, 'task1')}")
+
+def test_alara_split_inp_4_3():
+    workdir = os.path.join(cwd, "files_test_split", "split_4_3")
+    inp = os.path.join(workdir, "alara_inp")
+    exp_sub0 = os.path.join(workdir, "exp_alara_inp_0")
+    exp_sub1 = os.path.join(workdir, "exp_alara_inp_1")
+    exp_sub2 = os.path.join(workdir, "exp_alara_inp_2")
+
+    sub0 = os.path.join(workdir, "task0", "alara_inp_0")
+    sub1 = os.path.join(workdir, "task1", "alara_inp_1")
+    sub2 = os.path.join(workdir, "task2", "alara_inp_2")
+
+    # run alara_split_task
+    os.chdir(workdir)
+    os.system("alara_split_task -n 3")
+
+    # compare result
+    diff_flag_0 = diff_check_file(sub0, exp_sub0)
+    diff_flag_1 = diff_check_file(sub1, exp_sub1)
+    diff_flag_2 = diff_check_file(sub2, exp_sub2)
+
+    # check
+    assert(diff_flag_0==0)
+    assert(diff_flag_1==0)
+    assert(diff_flag_2==0)
+
+    # remove A, B, X, Y
+    os.system(f"rm -rf {os.path.join(workdir, 'task0')}")
+    os.system(f"rm -rf {os.path.join(workdir, 'task1')}")
+    os.system(f"rm -rf {os.path.join(workdir, 'task2')}")
 
 
