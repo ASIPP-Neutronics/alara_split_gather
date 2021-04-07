@@ -250,3 +250,5 @@ def alara_split_task():
         os.chdir("..")
         
 
+if __name__ == '__main__':
+    alara_split_task()
