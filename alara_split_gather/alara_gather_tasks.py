@@ -53,7 +53,7 @@ def append_photon_source_to_hdf5(num_tasks=2, nucs='all', chunkshape=(10000,),
     for i in range(num_tasks):
         filename = os.path.join(".", f"task{i}", f"phtn_src{sep}{i}")
         files.append(filename)
-    for filename in files:
+    for i, filename in enumerate(files):
         print(f"    running with file {filename}, [{i}/{num_tasks}]")
         f = open(filename, 'r')
         for i, line in enumerate(f, 1):
