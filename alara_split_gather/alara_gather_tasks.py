@@ -110,7 +110,7 @@ def merge_phtn_src(num_tasks=2, prefix="phtn_src", output="phtn_src", sep='_'):
             fo.write(cnt)
     fo.close()
 
-def alara_gather_tasks()
+def alara_gather_tasks():
     gather_alara_task_help = ('This script gather alara output and phtn_src\n')
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--num_tasks", required=False, help="number to sub-tasks, default: 2")
