@@ -186,7 +186,7 @@ def pbs_generation(tid, inp="alara_inp", sep='_'):
     """Generate a pbs file for current task id"""
     fo = open(f"alara_task{sep}{tid}.pbs", 'w')
     fo.write("#!/bin/bash\n")
-    fo.write(f"#PSB -N task{sep}{tid}\n")
+    fo.write(f"#PBS -N task{sep}{tid}\n")
     fo.write("#PBS -l nodes=1:ppn=28\n")
     fo.write("cd $PBS_O_WORKDIR\n")
     fo.write(f"$HOME/opt/ALARA/bin/alara {inp}{sep}{tid} > output{sep}{tid}.txt\n")
