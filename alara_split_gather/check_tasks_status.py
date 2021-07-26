@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
 import os
 import argparse
+import re
 
-def check_status(num_tasks, sep='_', prefix='phtn_src'):
+def check_status(sep='_', prefix='phtn_src'):
     # generate filenams for checking
     files = []
     sizes = []
     running = []
     finished = []
+    # get the folders start with task*
+    files = os.listdir(os.path.abspath("."))
+    task_pattern = re.compile("^task*")
+    num_tasks = 0
+    for f in files:
+        if re.match(task_pattern, f):
+            num_tasks += 1
+    print(f"{num_tasks} sub-task folders found")
     for i in range(num_tasks):
         filename = os.path.join(".", f"task{i}", f"{prefix}{sep}{i}")
         files.append(filename)
@@ -21,7 +30,7 @@ def check_status(num_tasks, sep='_', prefix='phtn_src'):
 
     # print the summary
     # finished tasks
-    fin_str = f"{len(finished)} tasks are finished, they are:\n     "
+    fin_str = f"{len(finished)} sub-tasks are finished, they are:\n     "
     count = 0
     for i in finished:
         count += 1
@@ -30,7 +39,7 @@ def check_status(num_tasks, sep='_', prefix='phtn_src'):
             fin_str = f"{fin_str}\n     "
     print(fin_str)
     # running tasks
-    run_str = f"{len(running)} tasks are running, they are:\n     "
+    run_str = f"{len(running)} sub-tasks are running, they are:\n     "
     count = 0
     for i in running:
         count += 1
@@ -43,14 +52,9 @@ def check_status(num_tasks, sep='_', prefix='phtn_src'):
 def alara_tasks_status():
     check_tasks_status_help = ('This script check the status of alara tasks\n')
     parser = argparse.ArgumentParser()
-    parser.add_argument("-n", "--num_tasks", required=True, help="number to sub-tasks, default: 2")
     parser.add_argument("-s", "--separator", required=False, help=" '_' or '-'")
     parser.add_argument("-p", "--prefix", required=False, help="prefix of phtn_src")
     args = vars(parser.parse_args())
-
-    # number of tasks
-    if args['num_tasks'] is not None:
-        num_tasks = int(args['num_tasks'])
 
     # prefix
     prefix = "phtn_src"
@@ -64,4 +68,7 @@ def alara_tasks_status():
             raise ValueError(f"separator {args['separator']} not supported!")
         sep = args['separator']
 
-    check_status(num_tasks, sep=sep, prefix=prefix)
+    check_status(sep=sep, prefix=prefix)
+
+if __name__ == '__main__':
+    alara_tasks_status()
