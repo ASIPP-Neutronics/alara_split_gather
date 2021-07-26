@@ -115,7 +115,6 @@ def alara_gather_tasks():
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--num_tasks", required=False, help="number to sub-tasks, default: 2")
     parser.add_argument("-m", "--mode",required=False, help="mode of gather, txt or h5")
-    parser.add_argument("-o", "--output", required=False, help="output file")
     parser.add_argument("-p", "--prefix", required=False, help="prefix of alara output")
     parser.add_argument("-s", "--separator", required=False, help=" '_' or '-'")
     args = vars(parser.parse_args())
@@ -133,16 +132,7 @@ def alara_gather_tasks():
         mode = args['mode']
     print(f"mode: {mode}")
     
-    # output
-    if mode == 'h5':
-        output = 'phtn_src.h5'
-    elif mode == 'txt':
-        output = 'phtn_src'
-    if args['output'] is not None:
-        output = args['output']
-    print(f"output: {output}")
-    
-    # input
+    # prefix
     prefix = "phtn_src"
     if args['prefix'] is not None:
         prefix = args['prefix']
@@ -156,7 +146,13 @@ def alara_gather_tasks():
         sep = args['separator']
     print(f"separator: {sep}")
 
-
+    # output filename
+    if mode == 'h5':
+        output = f"{prefix}.h5"
+    elif mode == 'txt':
+        output = f"{prefix}"
+    print(f"output file name: {output}")
+ 
     if mode == 'h5':
         append_photon_source_to_hdf5(num_tasks=num_tasks, nucs='TOTAL',
             output=output, sep=sep)
@@ -165,3 +161,6 @@ def alara_gather_tasks():
     else:
         raise ValueError("Wrong mode")
 
+
+if __name__ == '__main__':
+    alara_gather_tasks()
