@@ -1,3 +1,4 @@
 ## CHANGELOG
 - 20210726: Remove argument -n from check status
 - 20210726: Create output file name from prefix and mode in gather tasks
+- 20210726: Remove argument -n from gather
