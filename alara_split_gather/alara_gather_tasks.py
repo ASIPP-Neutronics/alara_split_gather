@@ -4,6 +4,7 @@ import tables as tb
 import os
 import argparse
 from pyne.alara import _make_response_dtype
+from alara_split_gather.utils import get_num_tasks
 
 def append_photon_source_to_hdf5(num_tasks=2, nucs='all', chunkshape=(10000,),
         output='phtn_src.h5',sep='_'):
@@ -113,19 +114,11 @@ def merge_phtn_src(num_tasks=2, prefix="phtn_src", output="phtn_src", sep='_'):
 def alara_gather_tasks():
     gather_alara_task_help = ('This script gather alara output and phtn_src\n')
     parser = argparse.ArgumentParser()
-    parser.add_argument("-n", "--num_tasks", required=False, help="number to sub-tasks, default: 2")
     parser.add_argument("-m", "--mode",required=False, help="mode of gather, txt or h5")
     parser.add_argument("-p", "--prefix", required=False, help="prefix of alara output")
     parser.add_argument("-s", "--separator", required=False, help=" '_' or '-'")
     args = vars(parser.parse_args())
 
-
-    # number of tasks
-    num_tasks = 2
-    if args['num_tasks'] is not None:
-        num_tasks = int(args['num_tasks'])
-    print(f"num_tasks: {num_tasks}")
-    
     # mode
     mode = 'h5'
     if args['mode'] is not None:
@@ -153,6 +146,11 @@ def alara_gather_tasks():
         output = f"{prefix}"
     print(f"output file name: {output}")
  
+    # get num_tasks
+    num_tasks = get_num_tasks()
+    print(f"{num_tasks} sub-tasks are found in {os.path.abspath('.')}")
+
+    # append/merge the file
     if mode == 'h5':
         append_photon_source_to_hdf5(num_tasks=num_tasks, nucs='TOTAL',
             output=output, sep=sep)

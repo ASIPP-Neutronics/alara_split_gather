@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import os
+import re
 
 def assign_subtasks(total_num, num_tasks=2):
     """
@@ -32,4 +34,12 @@ def diff_check_file(f1, f2):
     flag = os.system(command)
     return flag
 
-
+def get_num_tasks():
+    # get the folders start with task*
+    files = os.listdir(os.path.abspath("."))
+    task_pattern = re.compile("^task*")
+    num_tasks = 0
+    for f in files:
+        if re.match(task_pattern, f):
+            num_tasks += 1
+    return num_tasks

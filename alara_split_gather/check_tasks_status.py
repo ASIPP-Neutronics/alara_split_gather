@@ -2,6 +2,7 @@
 import os
 import argparse
 import re
+from alara_split_gather.utils import get_num_tasks
 
 def check_status(sep='_', prefix='phtn_src'):
     # generate filenams for checking
@@ -10,12 +11,13 @@ def check_status(sep='_', prefix='phtn_src'):
     running = []
     finished = []
     # get the folders start with task*
-    files = os.listdir(os.path.abspath("."))
-    task_pattern = re.compile("^task*")
-    num_tasks = 0
-    for f in files:
-        if re.match(task_pattern, f):
-            num_tasks += 1
+    num_tasks = get_num_tasks()
+#    files = os.listdir(os.path.abspath("."))
+#    task_pattern = re.compile("^task*")
+#    num_tasks = 0
+#    for f in files:
+#        if re.match(task_pattern, f):
+#            num_tasks += 1
     print(f"{num_tasks} sub-task folders found")
     for i in range(num_tasks):
         filename = os.path.join(".", f"task{i}", f"{prefix}{sep}{i}")
