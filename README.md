@@ -10,8 +10,26 @@ This package is used to:
 pip install alara-split-gather
 ```
 
-## Usage
+## Basic usage
+### Help info
 ```bash
+alara_split_task -h
+```
+
+### Split task
+```
 alara_split_task -i [alara_inp] -n [num_tasks]
 ```
 
+### Check status
+```
+alara_tasks_status
+```
+
+### Gather outputs of sub-tasks
+```
+alara_gather_tasks -p phtn_src
+```
+
+## Notes
+Refer to '-h' or source code for detalied usage.
